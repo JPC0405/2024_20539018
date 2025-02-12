@@ -2,9 +2,10 @@ name: doxygen-deploy
 
 on:
   push:
-    branches:[master]
+    branches:[ master ]
 
 jobs:
+
   deploy-worksheet5:
 
     runs-on: ubuntu-latest
