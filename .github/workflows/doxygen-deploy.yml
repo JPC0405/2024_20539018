@@ -16,7 +16,7 @@ jobs:
 
     -name: Install doxygen
       run: sudo apt-get install -y doxygen
-
+  
     -name: Run doxygen
       working-directory: ${{github.workspace}}/worksheet5
       run: doxygen
