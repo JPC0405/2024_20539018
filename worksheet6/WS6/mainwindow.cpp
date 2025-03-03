@@ -7,7 +7,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //( ui->pushButton, &QPushButton::released, this, &MainWindow::handleButton );
+    connect( ui->pushButton, &QPushButton::released, this, &MainWindow::handleButton );
+
+    connect( ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClick );
+
+
+    connect(this, &MainWindow::statusUpdateMessage,ui->statusbar, &QStatusBar::showMessage);
 
     this->partList = new ModelPartList("PartsList");
 
@@ -32,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
             childItem->appendChild(childChildItem);
         }
     }
-    connect(this, &MainWindow::statusUpdateMessage,ui->statusbar, &QStatusBar::showMessage);
+
 
 }
 
@@ -45,9 +50,19 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::handleButton(){
-    /*QMessageBox msgBox;
-    msgBox.setText("Add button was clicked");
-    msgBox.exec();*/
+    //QMessageBox msgBox;
+    //msgBox.setText("Add button was clicked");
+    //msgBox.exec();
 
-    emit statusUpdateMessage( QString("Add button was clicked"),0);
+    emit statusUpdateMessage( QString("Add button was clicked"), 0);
+}
+
+void MainWindow::handleTreeClick(){
+    QModelIndex index = ui->treeView->currentIndex();
+
+    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
+
+    QString text = selectedPart->data(0).toString();
+
+    emit statusUpdateMessage(QString("The selected item is: ")+text,0);
 }
