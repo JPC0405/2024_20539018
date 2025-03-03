@@ -23,5 +23,7 @@ private:
 public slots:
     void handleButton();
 
+signals:
+    void statusUpdateMessage(const QString & message, int timeout);
 };
 #endif // MAINWINDOW_H
