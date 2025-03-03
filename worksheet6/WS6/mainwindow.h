@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "Modelpart.h"
+#include "ModelpartList.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,6 +22,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ModelPartList* partList;
 
 public slots:
     void handleButton();
