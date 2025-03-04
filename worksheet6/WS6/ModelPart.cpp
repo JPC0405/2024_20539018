@@ -82,6 +82,10 @@ void ModelPart::set(int column, const QVariant &value) {
 }
 
 
+void ModelPart::setName(QString name){
+    m_itemData.replace(0, name);
+}
+
 ModelPart* ModelPart::parentItem() {
     return m_parentItem;
 }
@@ -97,20 +101,22 @@ int ModelPart::row() const {
 
 void ModelPart::setColour(const unsigned char R, const unsigned char G, const unsigned char B) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+    m_itemData.replace(2, R);
+    m_itemData.replace(3, G);
+    m_itemData.replace(4, B);
     /* As the name suggests ... */
 }
 
 unsigned char ModelPart::getColourR() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+    return m_itemData.at(2).toInt();
     /* As the name suggests ... */
     return 0;   // needs updating
 }
 
 unsigned char ModelPart::getColourG() {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+    return m_itemData.at(3).toInt();
     /* As the name suggests ... */
     return 0;   // needs updating
 }
@@ -118,7 +124,7 @@ unsigned char ModelPart::getColourG() {
 
 unsigned char ModelPart::getColourB() {
    /* This is a placeholder function that you will need to modify if you want to use it */
-    
+    return m_itemData.at(4).toInt();
     /* As the name suggests ... */
     return 0;   // needs updating
 }
@@ -126,7 +132,7 @@ unsigned char ModelPart::getColourB() {
 
 void ModelPart::setVisible(bool isVisible) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
+    m_itemData.replace(1, isVisible);
     /* As the name suggests ... */
 }
 
@@ -134,7 +140,7 @@ bool ModelPart::visible() {
     /* This is a placeholder function that you will need to modify if you want to use it */
     
     /* As the name suggests ... */
-    return false;
+    return m_itemData.at(1).toBool();
 }
 
 void ModelPart::loadSTL( QString fileName ) {

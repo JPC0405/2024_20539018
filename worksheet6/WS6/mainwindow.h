@@ -31,7 +31,9 @@ public slots:
 
 signals:
     void statusUpdateMessage(const QString & message, int timeout);
+
 private slots:
     void on_actionOpen_File_triggered();
+    void on_pushButton_2_clicked();
 };
 #endif // MAINWINDOW_H

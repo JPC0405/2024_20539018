@@ -1,7 +1,12 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "optiondialog.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDialog>
+
+
+//ModelPart *selectedPart;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,16 +29,24 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i =0; i<3; i++){
         QString name = QString("TopLevel %1").arg(1);
         QString visible("true");
+        qint64 R(0);
+        qint64 G(0);
+        qint64 B(0);
 
-        ModelPart *childItem = new ModelPart({name,visible});
+        ModelPart *childItem = new ModelPart({name,visible,R,G,B});
 
         rootItem->appendChild(childItem);
 
         for (int j=0;j<5;j++){
             QString name = QString("Item %1,%2").arg(i).arg(j);
             QString visible("true");
+            qint64 R(0);
+            qint64 G(0);
+            qint64 B(0);
 
-            ModelPart *childChildItem = new ModelPart({name , visible});
+
+
+            ModelPart *childChildItem = new ModelPart({name , visible,R,G,B});
 
             childItem->appendChild(childChildItem);
         }
@@ -80,4 +93,54 @@ void MainWindow::on_actionOpen_File_triggered()
 
     emit statusUpdateMessage(QString(fileName),0);
 }
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    OptionDialog dialog(this);
+
+    // Get the selected item
+    //QString name = selectedPart->data(0).toString();
+    //bool visible = selectedPart->visible();
+    //emit statusUpdateMessage(name,0);
+    // Call set functions in dialog to update dialog to match selected item
+
+    QModelIndex index = ui->treeView->currentIndex();
+
+    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
+
+    QString name = selectedPart->data(0).toString();
+    bool vis = selectedPart->data(1).toBool();
+    qint64 R = selectedPart->getColourR();
+    qint64 G = selectedPart->getColourG();
+    qint64 B = selectedPart->getColourB();
+
+    dialog.setVisibility(vis);
+    dialog.set_name(name);
+    dialog.set_R(R);
+    dialog.set_G(G);
+    dialog.set_B(B);
+
+    if (dialog.exec() == QDialog::Accepted){
+        emit statusUpdateMessage(QString("Dialog accepted"), 0);
+
+
+        // use get functions in dialog to get users choice
+        bool n_vis = dialog.getVisibility();
+        QString n_name = dialog.get_name();
+        unsigned char n_R = dialog.get_R();
+        unsigned char n_G = dialog.get_G();
+        unsigned char n_B = dialog.get_B();
+
+        selectedPart->setVisible(n_vis);
+        selectedPart->setName(n_name);
+        selectedPart->setColour(n_R,n_G,n_B);
+        // update the selected item
+    }
+
+    else{
+        emit statusUpdateMessage(QString("Dialog rejected"),0);
+    }
+}
+
 

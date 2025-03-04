@@ -81,6 +81,8 @@ public:
       */
     void set( int column, const QVariant& value );
 
+    void setName(QString name);
+
     /** Get pointer to parent item
       * @return pointer to parent item
       */
