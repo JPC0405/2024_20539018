@@ -25,6 +25,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::ContextMenuPolicy::ActionsContextMenu</enum>
+        </property>
        </widget>
       </item>
       <item>
@@ -108,6 +111,14 @@
    </property>
    <property name="text">
     <string>Open file</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionItems_Options">
+   <property name="text">
+    <string>Test</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>

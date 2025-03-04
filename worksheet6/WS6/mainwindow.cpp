@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->treeView->addAction(ui->actionItems_Options);
     connect( ui->pushButton, &QPushButton::released, this, &MainWindow::handleButton );
 
     connect( ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClick );
@@ -92,6 +93,10 @@ void MainWindow::on_actionOpen_File_triggered()
         tr("STL Files(*.stl);;Text Files(*.txt)"));
 
     emit statusUpdateMessage(QString(fileName),0);
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    selectedPart->setName(fileName.section('/', -1));
+
 }
 
 
@@ -143,4 +148,10 @@ void MainWindow::on_pushButton_2_clicked()
     }
 }
 
+
+
+void MainWindow::on_actionItems_Options_triggered()
+{
+    emit statusUpdateMessage(QString("Test action selected"),0);
+}
 

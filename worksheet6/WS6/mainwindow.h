@@ -35,5 +35,6 @@ signals:
 private slots:
     void on_actionOpen_File_triggered();
     void on_pushButton_2_clicked();
+    void on_actionItems_Options_triggered();
 };
 #endif // MAINWINDOW_H
