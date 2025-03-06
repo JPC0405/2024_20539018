@@ -6,6 +6,11 @@
 #include <QDialog>
 #include <vtkSmartPointer.h>
 #include <vtkrenderWindow.h>
+#include <vtkCylinderSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkProperty.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,6 +19,36 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->treeView->addAction(ui->actionItems_Options);
+    renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+    ui->widget->setRenderWindow(renderWindow);
+
+    renderer = vtkSmartPointer<vtkRenderer>::New();
+    renderWindow->AddRenderer(renderer);
+
+    vtkNew<vtkCylinderSource> cylinder;
+    cylinder->SetResolution(8);
+
+    vtkNew<vtkPolyDataMapper> cylinderMapper;
+    cylinderMapper->SetInputConnection(cylinder->GetOutputPort());
+
+    vtkNew<vtkActor> cylinderActor;
+    cylinderActor->SetMapper(cylinderMapper);
+    cylinderActor->GetProperty()->SetColor(1., 0., 0.35);
+    cylinderActor->RotateX(30.0);
+    cylinderActor->RotateY(-45.0);
+
+    renderer->AddActor(cylinderActor);
+
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
+
+
+
+
+
+
     connect( ui->pushButton, &QPushButton::released, this, &MainWindow::handleButton );
 
     connect( ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClick );

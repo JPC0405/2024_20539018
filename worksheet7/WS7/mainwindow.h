@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include "Modelpart.h"
 #include "ModelpartList.h"
-
+#include <vtkRenderer.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +24,9 @@ public:
 private:
     Ui::MainWindow *ui;
     ModelPartList* partList;
+
+    vtkSmartPointer<vtkRenderer> renderer;
+    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow;
 
 public slots:
     void handleButton();
