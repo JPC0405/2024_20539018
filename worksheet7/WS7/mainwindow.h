@@ -20,6 +20,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void updateRender();
+    void UpdateRenderFromTree(const QModelIndex& index);
 
 private:
     Ui::MainWindow *ui;

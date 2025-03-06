@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     renderer = vtkSmartPointer<vtkRenderer>::New();
     renderWindow->AddRenderer(renderer);
 
+    
     vtkNew<vtkCylinderSource> cylinder;
     cylinder->SetResolution(8);
 
@@ -38,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     cylinderActor->RotateY(-45.0);
 
     renderer->AddActor(cylinderActor);
+    
 
     renderer->ResetCamera();
     renderer->GetActiveCamera()->Azimuth(30);
@@ -62,6 +64,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ModelPart *rootItem = this->partList->getRootItem();
 
+
+
+    /*
     for (int i =0; i<3; i++){
         QString name = QString("TopLevel %1").arg(1);
         QString visible("true");
@@ -87,7 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
             childItem->appendChild(childChildItem);
         }
     }
-
+    */
 
 }
 
@@ -128,9 +133,31 @@ void MainWindow::on_actionOpen_File_triggered()
         tr("STL Files(*.stl);;Text Files(*.txt)"));
 
     emit statusUpdateMessage(QString(fileName),0);
-    QModelIndex index = ui->treeView->currentIndex();
-    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
-    selectedPart->setName(fileName.section('/', -1));
+
+    QString visible("true");
+    qint64 R(10);
+    qint64 G(0);
+    qint64 B(35);
+
+    ModelPart* childItem = new ModelPart({ fileName.section('/', -1),visible,R,G,B });
+
+    childItem->loadSTL(fileName);
+
+    emit statusUpdateMessage(QString("Loaded STL File"), 0);
+
+    renderer->AddActor(childItem->getActor());
+
+    emit statusUpdateMessage(QString("Added actor"), 0);
+
+    ModelPart* rootItem = this->partList->getRootItem();
+    rootItem->appendChild(childItem);
+
+    emit statusUpdateMessage(QString("Added to tree"), 0);
+
+    updateRender();
+    //QModelIndex index = ui->treeView->currentIndex();
+    //ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    //selectedPart->setName(fileName.section('/', -1));
 
 }
 
@@ -168,14 +195,17 @@ void MainWindow::on_pushButton_2_clicked()
         // use get functions in dialog to get users choice
         bool n_vis = dialog.getVisibility();
         QString n_name = dialog.get_name();
-        unsigned char n_R = dialog.get_R();
-        unsigned char n_G = dialog.get_G();
-        unsigned char n_B = dialog.get_B();
+        double n_R = dialog.get_R();
+        double n_G = dialog.get_G();
+        double n_B = dialog.get_B();
 
         selectedPart->setVisible(n_vis);
         selectedPart->setName(n_name);
         selectedPart->setColour(n_R,n_G,n_B);
         // update the selected item
+
+        selectedPart->getActor()->GetProperty()->SetColor(n_R/255, n_G/255, n_B/255);
+        selectedPart->getActor()->SetVisibility(n_vis);
     }
 
     else{
@@ -188,5 +218,35 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_actionItems_Options_triggered()
 {
     emit statusUpdateMessage(QString("Test action selected"),0);
+}
+
+void MainWindow::UpdateRenderFromTree(const QModelIndex& index) {
+    if (index.isValid()) {
+        ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+        renderer->AddActor(selectedPart->getActor());
+    }
+
+    if (!partList->hasChildren(index) || (index.flags() & Qt::ItemNeverHasChildren))
+    {
+        return;
+    }
+
+    int rows = partList->rowCount(index);
+    
+    for (int i = 0; i < rows; i++)
+    {
+        UpdateRenderFromTree(partList->index(i, 0, index));
+    }
+}
+
+void MainWindow::updateRender() {
+    renderer->RemoveAllViewProps();
+    UpdateRenderFromTree(partList->index(0, 0, QModelIndex()));
+    renderer->Render();
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
+
 }
 

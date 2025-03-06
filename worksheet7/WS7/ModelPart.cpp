@@ -13,8 +13,13 @@
 /* Commented out for now, will be uncommented later when you have
  * installed the VTK library
  */
-//#include <vtkSmartPointer.h>
-//#include <vtkDataSetMapper.h>
+#include <vtkSmartPointer.h>
+#include <vtkActor.h>
+#include <vtkDataSetMapper.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+
+
 
 
 
@@ -111,14 +116,12 @@ unsigned char ModelPart::getColourR() {
     /* This is a placeholder function that you will need to modify if you want to use it */
     return m_itemData.at(2).toInt();
     /* As the name suggests ... */
-    return 0;   // needs updating
 }
 
 unsigned char ModelPart::getColourG() {
     /* This is a placeholder function that you will need to modify if you want to use it */
     return m_itemData.at(3).toInt();
     /* As the name suggests ... */
-    return 0;   // needs updating
 }
 
 
@@ -126,7 +129,6 @@ unsigned char ModelPart::getColourB() {
    /* This is a placeholder function that you will need to modify if you want to use it */
     return m_itemData.at(4).toInt();
     /* As the name suggests ... */
-    return 0;   // needs updating
 }
 
 
@@ -150,18 +152,30 @@ void ModelPart::loadSTL( QString fileName ) {
      *     https://vtk.org/doc/nightly/html/classvtkSTLReader.html
      */
 
+    file = vtkNew<vtkSTLReader>();
+    file->SetFileName(fileName.toLocal8Bit());
+
     /* 2. Initialise the part's vtkMapper */
-    
+    mapper = vtkNew<vtkPolyDataMapper>();
+    mapper->SetInputConnection(file->GetOutputPort());
+
+
     /* 3. Initialise the part's vtkActor and link to the mapper */
+    actor = vtkNew<vtkActor>();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetColor(1, 0, 0.35);
+
+    
 }
 
-//vtkSmartPointer<vtkActor> ModelPart::getActor() {
+vtkSmartPointer<vtkActor> ModelPart::getActor() {
     /* This is a placeholder function that you will need to modify if you want to use it */
     
     /* Needs to return a smart pointer to the vtkActor to allow
      * part to be rendered.
      */
-//}
+    return actor;
+}
 
 //vtkActor* ModelPart::getNewActor() {
     /* This is a placeholder function that you will need to modify if you want to use it
