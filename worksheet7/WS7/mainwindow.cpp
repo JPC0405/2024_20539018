@@ -64,7 +64,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     ModelPart *rootItem = this->partList->getRootItem();
 
+    QString name = QString("Model").arg(1);
+    QString visible("true");
+    qint64 R(10);
+    qint64 G(0);
+    qint64 B(35);
 
+    ModelPart* childItem = new ModelPart({ name,visible,R,G,B });
+
+    rootItem->appendChild(childItem);
 
     /*
     for (int i =0; i<3; i++){
@@ -141,6 +149,9 @@ void MainWindow::on_actionOpen_File_triggered()
 
     ModelPart* childItem = new ModelPart({ fileName.section('/', -1),visible,R,G,B });
 
+    QModelIndex index = ui->treeView->currentIndex();
+    ModelPart* selectedPart = static_cast<ModelPart*>(index.internalPointer());
+
     childItem->loadSTL(fileName);
 
     emit statusUpdateMessage(QString("Loaded STL File"), 0);
@@ -149,8 +160,7 @@ void MainWindow::on_actionOpen_File_triggered()
 
     emit statusUpdateMessage(QString("Added actor"), 0);
 
-    ModelPart* rootItem = this->partList->getRootItem();
-    rootItem->appendChild(childItem);
+    selectedPart->appendChild(childItem);
 
     emit statusUpdateMessage(QString("Added to tree"), 0);
 
@@ -231,11 +241,13 @@ void MainWindow::UpdateRenderFromTree(const QModelIndex& index) {
         return;
     }
 
-    int rows = partList->rowCount(index);
-    
-    for (int i = 0; i < rows; i++)
-    {
-        UpdateRenderFromTree(partList->index(i, 0, index));
+    else {
+        int rows = partList->rowCount(index);
+
+        for (int i = 0; i < rows; i++)
+        {
+            UpdateRenderFromTree(partList->index(i, 0, index));
+        }
     }
 }
 
