@@ -9,10 +9,6 @@
 
 #include "ModelPart.h"
 
-
-/* Commented out for now, will be uncommented later when you have
- * installed the VTK library
- */
 #include <vtkSmartPointer.h>
 #include <vtkActor.h>
 #include <vtkDataSetMapper.h>
@@ -25,8 +21,6 @@
 
 ModelPart::ModelPart(const QList<QVariant>& data, ModelPart* parent )
     : m_itemData(data), m_parentItem(parent) {
-
-    /* You probably want to give the item a default colour */
 }
 
 
@@ -105,52 +99,42 @@ int ModelPart::row() const {
 }
 
 void ModelPart::setColour(const unsigned char R, const unsigned char G, const unsigned char B) {
-    /* This is a placeholder function that you will need to modify if you want to use it */
+    // Replace data in column 2,3,4 with the RGB vals
     m_itemData.replace(2, R);
     m_itemData.replace(3, G);
     m_itemData.replace(4, B);
-    /* As the name suggests ... */
 }
 
 unsigned char ModelPart::getColourR() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
+    // Returns the R data val from column 2 
     return m_itemData.at(2).toInt();
-    /* As the name suggests ... */
 }
 
 unsigned char ModelPart::getColourG() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
+    // Returns the B data val from column 3
     return m_itemData.at(3).toInt();
-    /* As the name suggests ... */
 }
 
 
 unsigned char ModelPart::getColourB() {
-   /* This is a placeholder function that you will need to modify if you want to use it */
+    // Returns the G data val from column 4 
     return m_itemData.at(4).toInt();
-    /* As the name suggests ... */
 }
 
 
 void ModelPart::setVisible(bool isVisible) {
-    /* This is a placeholder function that you will need to modify if you want to use it */
+    // Replace data in column 1 with the vis boolean
     m_itemData.replace(1, isVisible);
-    /* As the name suggests ... */
 }
 
 bool ModelPart::visible() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* As the name suggests ... */
+    // Returns the visibilty from coloumn 1
     return m_itemData.at(1).toBool();
 }
 
 void ModelPart::loadSTL( QString fileName ) {
-    /* This is a placeholder function that you will need to modify if you want to use it */
     
-    /* 1. Use the vtkSTLReader class to load the STL file 
-     *     https://vtk.org/doc/nightly/html/classvtkSTLReader.html
-     */
+    // 1. Use the vtkSTLReader class to load the STL file 
 
     file = vtkNew<vtkSTLReader>();
     file->SetFileName(fileName.toLocal8Bit());
@@ -169,11 +153,7 @@ void ModelPart::loadSTL( QString fileName ) {
 }
 
 vtkSmartPointer<vtkActor> ModelPart::getActor() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* Needs to return a smart pointer to the vtkActor to allow
-     * part to be rendered.
-     */
+    // Returns the actor of the part
     return actor;
 }
 

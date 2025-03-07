@@ -22,6 +22,7 @@ public:
     ~MainWindow();
     void updateRender();
     void UpdateRenderFromTree(const QModelIndex& index);
+    void updateChildren(ModelPart* parent, bool vis, double r, double g, double b);
 
 private:
     Ui::MainWindow *ui;

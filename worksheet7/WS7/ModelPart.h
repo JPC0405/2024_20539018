@@ -99,6 +99,7 @@ public:
       */
     void setColour(const unsigned char R, const unsigned char G, const unsigned char B);
 
+    // Getters for the colours of the part
     unsigned char getColourR();
     unsigned char getColourG();
     unsigned char getColourB();
