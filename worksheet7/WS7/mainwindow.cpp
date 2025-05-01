@@ -219,8 +219,6 @@ void MainWindow::on_pushButton_2_clicked()
     }
 }
 
-
-
 void MainWindow::on_actionItems_Options_triggered()
 {
     emit statusUpdateMessage(QString("Test action selected"),0);
@@ -274,7 +272,6 @@ void MainWindow::updateChildren(ModelPart* parent, bool vis, double r, double g,
         updateChildren(childPart, vis, r, g, b);
     }
 }
-
 
 void MainWindow::updateRender() {
     // Remove all actors from render window

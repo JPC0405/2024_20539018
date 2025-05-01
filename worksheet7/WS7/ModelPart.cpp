@@ -103,6 +103,9 @@ void ModelPart::setColour(const unsigned char R, const unsigned char G, const un
     m_itemData.replace(2, R);
     m_itemData.replace(3, G);
     m_itemData.replace(4, B);
+    r = R;
+    g = G;
+    b = b;
 }
 
 unsigned char ModelPart::getColourR() {
@@ -122,9 +125,10 @@ unsigned char ModelPart::getColourB() {
 }
 
 
-void ModelPart::setVisible(bool isVisible) {
+void ModelPart::setVisible(bool Visible) {
     // Replace data in column 1 with the vis boolean
-    m_itemData.replace(1, isVisible);
+    m_itemData.replace(1, Visible);
+    isVisible = Visible;
 }
 
 bool ModelPart::visible() {
